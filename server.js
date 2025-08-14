@@ -11,7 +11,7 @@ const database = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "root",
-  database: "codewave_bootcamp"
+  database: "codewave_bootcamp",
 });
 
 database.connect((err) => {
@@ -64,7 +64,10 @@ app.post("/student", (req, res) => {
 
   database.query(`INSERT INTO students(id, full_name, stack, email) VALUES (?,?,?,?)`, [uuid(), full_name, stack, email], (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Error creating student", error: err.message });
+      res.status(500).json({
+        message: "Error creating student",
+        error: err.message,
+      });
     } else {
       res.status(200).json({
         message: "Student created successfully",
@@ -78,7 +81,10 @@ app.post("/student", (req, res) => {
 app.get("/students", (req, res) => {
   database.query(`SELECT * FROM students`, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Error getting all students", error: err.message });
+      res.status(500).json({
+        message: "Error getting all students",
+        error: err.message,
+      });
     } else {
       res.status(200).json({
         message: "All students",
@@ -94,11 +100,19 @@ app.get("/student/:id", (req, res) => {
 
   database.query(`SELECT * FROM students WHERE id = ?`, [id], (err, row) => {
     if (err) {
-      res.status(500).json({ message: "Error fetching student", error: err.message });
+      res.status(500).json({
+        message: "Error fetching student",
+        error: err.message,
+      });
     } else if (row.length === 0) {
-      res.status(404).json({ message: `Student with ID: ${id} not found` });
+      res.status(404).json({
+        message: `Student with ID: ${id} not found`,
+      });
     } else {
-      res.status(200).json({ message: "Student found", data: row[0] });
+      res.status(200).json({
+        message: "Student found",
+        data: row[0],
+      });
     }
   });
 });
@@ -144,7 +158,10 @@ app.post("/score", (req, res) => {
     [uuid(), student_id, punctuality_score, assignment_score, total_score],
     (err, data) => {
       if (err) {
-        res.status(500).json({ message: "Error inserting score", error: err.message });
+        res.status(500).json({
+          message: "Error inserting score",
+          error: err.message,
+        });
       } else {
         res.status(200).json({ message: "Score inserted successfully" });
       }
@@ -156,7 +173,10 @@ app.post("/score", (req, res) => {
 app.get("/scores", (req, res) => {
   database.query(`SELECT * FROM scores`, (err, data) => {
     if (err) {
-      res.status(500).json({ message: "Error fetching scores", error: err.message });
+      res.status(500).json({
+        message: "Error fetching scores",
+        error: err.message,
+      });
     } else {
       res.status(200).json({ message: "All scores", data });
     }
@@ -166,12 +186,16 @@ app.get("/scores", (req, res) => {
 // LEFT JOIN
 app.get("/students-scores", (req, res) => {
   database.query(
-    `SELECT students.full_name, students.stack, students.email, scores.punctuality_score, scores.assignment_score, scores.total_score 
+    `SELECT students.full_name, students.stack, students.email,
+     scores.punctuality_score, scores.assignment_score, scores.total_score 
      FROM students 
      LEFT JOIN scores ON students.id = scores.student_id`,
     (err, data) => {
       if (err) {
-        res.status(500).json({ message: "Error performing LEFT JOIN", error: err.message });
+        res.status(500).json({
+          message: "Error performing LEFT JOIN",
+          error: err.message,
+        });
       } else {
         res.status(200).json({ message: "Students with scores (LEFT JOIN)", data });
       }
@@ -182,12 +206,16 @@ app.get("/students-scores", (req, res) => {
 // RIGHT JOIN
 app.get("/scores-students", (req, res) => {
   database.query(
-    `SELECT students.full_name, students.stack, students.email, scores.punctuality_score, scores.assignment_score, scores.total_score 
+    `SELECT students.full_name, students.stack, students.email,
+     scores.punctuality_score, scores.assignment_score, scores.total_score 
      FROM students 
      RIGHT JOIN scores ON students.id = scores.student_id`,
     (err, data) => {
       if (err) {
-        res.status(500).json({ message: "Error performing RIGHT JOIN", error: err.message });
+        res.status(500).json({
+          message: "Error performing RIGHT JOIN",
+          error: err.message,
+        });
       } else {
         res.status(200).json({ message: "Scores with students (RIGHT JOIN)", data });
       }
