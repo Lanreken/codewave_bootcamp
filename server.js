@@ -117,7 +117,7 @@ app.get("/student/:id", (req, res) => {
   });
 });
 
-// Update a student's stack
+// Update a student
 app.put("/student/:id", (req, res) => {
   const { id } = req.params;
   const { stack, email, full_name } = req.body;
